@@ -21,6 +21,7 @@ func main() {
 	router := NewRouter()
 
 	router.Handle("room add", addRoom)
+	router.Handle("chat message", chatText)
 
 	http.Handle("/", router)
 	http.ListenAndServe(":4652", nil)

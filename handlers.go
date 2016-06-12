@@ -13,6 +13,13 @@ type AddRoom struct {
 	Room string `json:"room"`
 }
 
+// ChatText - data format chat text
+type ChatText struct {
+	User string `json:"user"`
+	Room string `json:"room"`
+	Text string `json:"text"`
+}
+
 // create new room and possibly user if he does not exist
 func addRoom(client *Client, data interface{}) {
 	var room Room
@@ -42,4 +49,18 @@ func addRoom(client *Client, data interface{}) {
 	message.Name = "room add"
 	message.Data = messageData
 	client.send <- message
+}
+
+func chatText(client *Client, data interface{}) {
+	var chatTextData ChatText
+	var chatMessage Message
+
+	mapstructure.Decode(data, &chatTextData)
+
+	fmt.Printf("%#v\n", chatTextData)
+
+	chatMessage.Name = "chat message"
+	chatMessage.Data = chatTextData
+
+	client.send <- chatMessage
 }
