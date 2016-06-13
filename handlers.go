@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/pborman/uuid"
 )
 
 // AddRoom - data format for add room message
@@ -22,7 +21,7 @@ type ChatText struct {
 
 // create new room and possibly user if he does not exist
 func addRoom(client *Client, data interface{}) {
-	var room Room
+	var room *Room
 	var user User
 	var message Message
 	var addRoomData AddRoom
@@ -34,33 +33,46 @@ func addRoom(client *Client, data interface{}) {
 
 	fmt.Printf("%#v\n", addRoomData)
 
-	room.ID = uuid.New()
-	room.Name = addRoomData.Room
-	user.ID = uuid.New()
-	user.Name = addRoomData.User
-
-	existingUser, isPresent := mainStore.FindUser(user)
+	existingRoom, isPresent := mainStore.FindRoom(addRoomData.Room)
 	if isPresent {
-		user = *existingUser
+		room = existingRoom
+	} else {
+		room = NewRoom(addRoomData.Room)
+		mainStore.AddRoom(*room)
+		go room.run()
 	}
+
+	room.join <- client
 
 	messageData["room"] = room
 	messageData["user"] = user
 	message.Name = "room add"
 	message.Data = messageData
-	client.send <- message
+	room.messageForward <- message
 }
 
 func chatText(client *Client, data interface{}) {
+	var room *Room
 	var chatTextData ChatText
 	var chatMessage Message
+
+	fmt.Println(data)
 
 	mapstructure.Decode(data, &chatTextData)
 
 	fmt.Printf("%#v\n", chatTextData)
 
+	existingRoom, isPresent := mainStore.FindRoom(chatTextData.Room)
+	if isPresent {
+		room = existingRoom
+	} else {
+		room = NewRoom(chatTextData.Room)
+		mainStore.AddRoom(*room)
+		go room.run()
+	}
+
 	chatMessage.Name = "chat message"
 	chatMessage.Data = chatTextData
 
-	client.send <- chatMessage
+	room.messageForward <- chatMessage
 }

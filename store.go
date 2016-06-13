@@ -18,6 +18,20 @@ func NewMockStore() (*MockStore, error) {
 	return mockStore, nil
 }
 
+func (ms *MockStore) FindRoom(roomName string) (*Room, bool) {
+	for _, storedRoom := range ms.RoomStore {
+		if storedRoom.Name == roomName {
+			return &storedRoom, true
+		}
+	}
+
+	return nil, false
+}
+
+func (ms *MockStore) AddRoom(room Room) {
+	ms.RoomStore = append(ms.RoomStore, room)
+}
+
 // FindUser - find if the given user already exists
 func (ms *MockStore) FindUser(user User) (*User, bool) {
 	for _, storedUser := range ms.UserStore {

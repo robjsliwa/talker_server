@@ -2,12 +2,6 @@ package main
 
 import "net/http"
 
-// Room - struct for rooms where users can meet
-type Room struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
 // User - struct identifies valid user
 type User struct {
 	ID   string `json:"id"`

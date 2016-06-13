@@ -12,6 +12,7 @@ type Message struct {
 type Client struct {
 	send        chan Message
 	socket      *websocket.Conn
+	room        Room
 	findHandler FindHandler
 }
 
