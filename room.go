@@ -1,6 +1,10 @@
 package main
 
-import "github.com/pborman/uuid"
+import (
+	"log"
+
+	"github.com/pborman/uuid"
+)
 
 // Room - struct for rooms where users can meet
 type Room struct {
@@ -42,6 +46,7 @@ func (r *Room) run() {
 					// some failure sending message
 					delete(r.clients, client)
 					close(client.send)
+					log.Println("Disconnecting from client")
 				}
 			}
 		}
