@@ -8,8 +8,8 @@ import (
 
 // Room - struct for rooms where users can meet
 type Room struct {
-	ID             string
-	Name           string
+	ID             string `json:"id"`
+	Name           string `json:"name"`
 	messageForward chan Message
 	join           chan *Client
 	leave          chan *Client

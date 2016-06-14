@@ -33,9 +33,9 @@ func (ms *MockStore) AddRoom(room Room) {
 }
 
 // FindUser - find if the given user already exists
-func (ms *MockStore) FindUser(user User) (*User, bool) {
+func (ms *MockStore) FindUser(userName string, userID string) (*User, bool) {
 	for _, storedUser := range ms.UserStore {
-		if storedUser.Name == user.Name {
+		if storedUser.Name == userName && storedUser.ID == userID {
 			return &storedUser, true
 		}
 	}
