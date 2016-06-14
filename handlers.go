@@ -17,11 +17,12 @@ type AddRoom struct {
 
 // ChatText - data format chat text
 type ChatText struct {
-	User   string `json:"user"`
-	UserID string `json:"userID"`
-	Room   string `json:"room"`
-	Text   string `json:"text"`
-	TextID string `json:"textID"`
+	User      string `json:"user"`
+	UserID    string `json:"userID"`
+	Room      string `json:"room"`
+	Text      string `json:"text"`
+	TextID    string `json:"textID"`
+	Timestamp int64  `json:"timestamp"`
 }
 
 // create new room and possibly user if he does not exist
