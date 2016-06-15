@@ -64,7 +64,8 @@ func addRoom(client *Client, data interface{}) {
 	messageData["user"] = user
 	message.Name = "room add"
 	message.Data = messageData
-	room.messageForward <- message
+	// join/add room message only acks to the client it came from
+	client.send <- message
 }
 
 func chatText(client *Client, data interface{}) {
